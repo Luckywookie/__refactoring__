@@ -120,6 +120,7 @@ class SimilarTourListView(ListAPIView):
                 'is_best_price': tour.is_best_price,
                 'is_best_tour': tour.is_best_tour,
                 'is_editors_choice': tour.is_editors_choice,
+                'is_special': tour.special,
             })
 
         return JsonResponse(result)

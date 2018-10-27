@@ -69,10 +69,14 @@ class Tour(models.Model):
     class Type:
         RECREATION_TOUR = 1
         EVENT_TOUR = 2
+        GOLD_TOUR = 3
+        VIP_TOUR = 4
 
         choices = (
             (RECREATION_TOUR, 'Тур'),
             (EVENT_TOUR, 'Событие'),
+            (GOLD_TOUR, 'Золотой тур'),
+            (VIP_TOUR, 'VIP тур'),
         )
 
     class PriceType:
@@ -153,7 +157,6 @@ class Tour(models.Model):
                                           verbose_name='Дата создания/редактирования обложки')
     photos = models.ManyToManyField('images.OriginalImage', blank=True, verbose_name='Фотографии')
     services = models.ManyToManyField(Service, blank=True, verbose_name='Услуги')
-
 
     class Meta:
         verbose_name = 'Тур'
@@ -240,6 +243,10 @@ class Tour(models.Model):
         linebreak = '<br />' if br_line_breaks else '\n'
         return linebreak.join(tour_info)
 
+    @property
+    def special(self):
+        return self.tour_type > 2
+
     @classmethod
     def export_to_csv(cls, file_obj, tours_qs):
         """Производит выгрузку выбранных туров в csv-файл.
@@ -265,6 +272,6 @@ class Tour(models.Model):
                 tour_obj.begins_at,
                 tour_obj.ends_at,
             ]
-            row = dict(zip(OFFER_DUMP_HEADER, dump_data))
+            row = dict(zip(['Title', 'Value'], dump_data))
             dump_writer.writerow(row)
 
