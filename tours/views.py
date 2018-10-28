@@ -74,7 +74,7 @@ class SimilarTourListView(ListAPIView):
         obj = Tour.objects.get(pk=tour_id)
         similar_tours = Tour.objects.public().filter(tour_type=obj.tour_type).exclude(id=obj.id)
 
-        if obj.tour_type == Tour.Type.RECREATION_TOUR:
+        if obj.tour_type == 1:
             similar_tours = similar_tours.filter(trip_type=obj.trip_type)
 
         similar_tours = similar_tours.order_by('?').select_related('city', 'city__country', 'trip_type')[:4]
